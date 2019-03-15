@@ -4,8 +4,11 @@ class Character:
 	def __init__(self, name):
 		self.name = name
 		self.room = None
+		self.suspect = True
 
 	def moveToRoom(self, room):
+		if self.room != None:
+			self.room.removeCharacter(self)
 		self.room = room
 		room.addCharacter(self)
 

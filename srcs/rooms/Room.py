@@ -17,5 +17,5 @@ class Room:
 	def addCharacter(self, character):
 		self.characters.append(character)
 
-	def getCharacters(self):
-		return self.characters
+	def removeCharacter(self, character):
+		self.characters.remove(character)

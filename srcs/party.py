@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from characters.Character import Character
 from rooms.Room import Room
+import time
 
 class Party:
 	def __init__(self, playerType):
@@ -9,6 +10,8 @@ class Party:
 		self.endCarlota = 22
 		self.rooms = []
 		self.createRoom()
+		self.fantome = None
+		self.readInfoLines()
 
 	def createRoom(self):
 		self.rooms = [Room(0), Room(1), Room(2), Room(3), Room(4), Room(5), Room(6), Room(7), Room(8), Room(9)]
@@ -22,5 +25,21 @@ class Party:
 			for otherRoom in pass_ext[index]:
 				room.addExtendedRoom(self.rooms[otherRoom])
 
-party = Party("GHOST")
+	def createCharacters(self):
+		return
 
+	def obscurcirRoom(self, numero):
+		for room in self.rooms:
+			if room.name == numero:
+				room.light = False
+			else:
+				room.light = True
+			
+	def readInfoLines(self):
+		f = open("infos.txt", "r")
+		while True:
+			lines = f.readlines()
+			print(lines)
+			time.sleep(1)
+
+party = Party("GHOST")
