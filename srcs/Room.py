@@ -4,6 +4,7 @@ class Room:
 	def __init__(self, name):
 		self.name = name
 		self.rooms = []
+		self.roomBloque = None
 		self.extendedRooms = []
 		self.light = True
 		self.characters = []
@@ -20,7 +21,12 @@ class Room:
 	def removeCharacter(self, character):
 		self.characters.remove(character)
 
-	def display(self):
-		print "Room ", self.name, " :"
-		for i, c in enumerate(self.characters):
-			print "\t", c.name, "suspect" if c.suspect else "inocent"
+	def __str__(self):
+		result = "Room " + str(self.name)
+		result += " : nbCharacters = " + str(len(self.characters))
+		result += " ; light = " + str(self.light)
+		result += " ; room bloqued = " + ("None" if self.roomBloque == None else str(self.roomBloque)) + " [ "
+		for char in self.characters:
+			result += char.color + " "
+		result += "]"
+		return  result
