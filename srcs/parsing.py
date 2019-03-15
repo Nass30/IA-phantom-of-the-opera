@@ -40,8 +40,40 @@ class Parser:
 					room = int(cinfos[1])
 					suspect = cinfos[2]
 					self.partyInfos.updateCharacter(color, room, True if suspect == "suspect" else False)
-				return
+				break
 			i -= 1
+		i += 1
+		while i < len(self.lines):
+			line = (self.lines)[i]
+			if "NOUVEAU PLACEMENT" in line:
+				move = line.split()[3]
+				color = move.split('-')[0]
+				roomNumber = int(move.split('-')[1])
+				suspect = move.split('-')[2]
+				self.partyInfos.updateCharacter(color, roomNumber, True if suspect == "suspect" else False)
+			elif "a été tiré" in line:
+				if "fantome" in line:
+					self.partyInfos.carlota += -1 if self.partyInfos.number == 0 else 1
+				else:
+					move = line.split()[0]
+					color = move.split('-')[0]
+					roomNumber = int(move.split('-')[1])
+					suspect = move.split('-')[2]
+					self.partyInfos.updateCharacter(color, roomNumber, True if suspect == "suspect" else False)
+			elif "QUESTION : Quelle salle obscurcir ? (0-9)" in line:
+				i += 2
+				line = (self.lines)[i]
+				room = int(line.split()[3])
+				self.partyInfos.obscurcirRoom(room)
+			elif "Quelle salle bloquer ? (0-9)" in line:
+				i += 4
+				line = (self.lines)[i]
+				passage = line.split()[3]
+				room1 = int(passage[1])
+				room2 = int(passage[4])
+				self.partyInfos.bloquePassage(room1, room2)
+			i += 1
+
 	def readInfos(self):
 		info_file = open('./' + self.number + '/infos.txt', 'r')
 		self.lines = info_file.readlines()
