@@ -15,7 +15,7 @@ class Parser:
 		info_file.close()
 
 	def getGhost(self):
-		if len(self.lines) == 0:
+		if len(self.lines) != 0:
 			line = self.lines[0]
 			self.partyInfos.fantome = line.split()[-1]
 

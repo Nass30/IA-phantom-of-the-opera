@@ -58,6 +58,10 @@ class PartyInformations:
 
     def __str__(self):
         result = ""
+        if self.fantome != None:
+            result += "fantome = " + self.fantome + '\n'
+        result += "Tour number : " + str(self.tourNumber) + "\n"
+        result += "Carlota : " + str(self.carlota) + "/" + str(self.maxCarlota) + "\n"
         for c in self.characters:
             result += str(c) + "\n"
         for r in self.rooms:

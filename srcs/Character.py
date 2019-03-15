@@ -3,7 +3,8 @@
 class Character:
 	def __init__(self, color, suspect, room):
 		self.color = color
-		self.room = room
+		self.room = None
+		self.moveToRoom(room)
 		self.suspect = suspect
 
 	def moveToRoom(self, room):
