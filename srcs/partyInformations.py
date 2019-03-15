@@ -1,6 +1,9 @@
 from Character import Character
 from Room import Room
 
+GHOST = 1
+INSPECTOR = 0
+
 class PartyInformations:
     def __init__(self, number):
         self.number = number
@@ -11,6 +14,8 @@ class PartyInformations:
         self.carlota = 4
         self.maxCarlota = 22
         self.fantome = "none"
+        self.taro = []
+        self.turn = []
 
     def createRoom(self):
         self.rooms = [Room(0), Room(1), Room(2), Room(3), Room(4), Room(5), Room(6), Room(7), Room(8), Room(9)]

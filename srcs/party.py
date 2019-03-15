@@ -14,5 +14,5 @@ class Party:
 		if number == 1:
 			self.parser.getGhost()
 		self.parser.parseTourInfos()
-
+                
 		print(self.partyInfos)
