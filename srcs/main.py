@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 from characters import Character
 from rooms import Room
-import parsing
 
 class MainIA:
 	def __init__(self):
-		self.parser = parsing.Parser()
 		self.createRooms()
 		self.createCharacters()
 		self.mainLoop()
