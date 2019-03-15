@@ -7,7 +7,7 @@ class Character:
 		self.suspect = True
 
 	def moveToRoom(self, room):
-		if self.room != None:
+		if self.room:
 			self.room.removeCharacter(self)
 		self.room = room
 		room.addCharacter(self)

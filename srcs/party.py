@@ -11,7 +11,7 @@ class Party:
 		self.rooms = []
 		self.createRoom()
 		self.fantome = None
-		self.readInfoLines()
+		#self.readInfoLines()
 
 	def createRoom(self):
 		self.rooms = [Room(0), Room(1), Room(2), Room(3), Room(4), Room(5), Room(6), Room(7), Room(8), Room(9)]
@@ -42,4 +42,4 @@ class Party:
 			print(lines)
 			time.sleep(1)
 
-party = Party("GHOST")
+#party = Party("GHOST")

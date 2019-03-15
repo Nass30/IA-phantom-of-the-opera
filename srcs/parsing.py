@@ -24,6 +24,6 @@ class Parser:
 		return questionLine
 
 	def sendResponse(self, str):
-            rf = open('./' + self.number + '/reponses.txt','w')
+        rf = open('./' + self.number + '/reponses.txt','w')
 	    rf.write(str)
-            rf.close()
+        rf.close()

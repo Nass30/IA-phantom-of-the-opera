@@ -19,3 +19,8 @@ class Room:
 
 	def removeCharacter(self, character):
 		self.characters.remove(character)
+
+	def display(self):
+		print "Room ", self.name, " :"
+		for i, c in enumerate(self.characters):
+			print "\t", c.name, "suspect" if c.suspect else "inocent"
