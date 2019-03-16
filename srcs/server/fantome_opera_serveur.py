@@ -3,7 +3,7 @@ from time import sleep
 from threading import Thread
 import dummy0, dummy1
 
-latence = 1
+latence = 0.01
 permanents, deux, avant, apres = {'rose'}, {'rouge','gris','bleu'}, {'violet','marron'}, {'noir','blanc'}
 couleurs = avant | permanents | apres | deux
 passages = [{1,4},{0,2},{1,3},{2,7},{0,5,8},{4,6},{5,7},{3,6,9},{4,9},{7,8}]
@@ -125,11 +125,11 @@ class joueur:
 class partie:
     def __init__(self,joueurs):
         for i in [0,1]:
-            f = open("./" + str(i) + "/infos.txt","w")
+            f = open("./" + str(i) + "/infos.txt","w+")
             f.close()
-            f = open("./" + str(i) + "/questions.txt","w")
+            f = open("./" + str(i) + "/questions.txt","w+")
             f.close()
-            f = open("./" + str(i) + "/reponses.txt","w")
+            f = open("./" + str(i) + "/reponses.txt","w+")
             f.close()
         self.joueurs = joueurs
         self.start, self.end, self.num_tour, self.shadow, x = 4, 22, 1, randrange(10), randrange(10)
@@ -180,6 +180,7 @@ class partie:
             p.pouvoir = True
         self.num_tour += 1
     def lancer(self):
+        print("lancer")
         while self.start < self.end and len([p for p in self.personnages if p.suspect]) > 1:
             self.tour()
         informer("L'enquêteur a trouvé - c'était " + str(self.fantome) if self.start < self.end else "Le fantôme a gagné")
@@ -191,3 +192,4 @@ joueurs = [joueur(0),joueur(1)]
 Thread(target=dummy0.lancer).start()
 Thread(target=dummy1.lancer).start()
 partie(joueurs).lancer()
+

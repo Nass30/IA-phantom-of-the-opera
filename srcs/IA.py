@@ -10,11 +10,12 @@ class IA:
         self.deep = 1
 
     def compute(self):
-        result = {"tile":0, "perso":None, "move":None, "power":0, "weight":-1, "lock":0, "light":0}
+        result = {"tile":0, "perso":None, "move":None, "power":0, "weight":-1, "lock":0, "light":0, "powerResult":0}
+        print ("taro:", self.info.taro)
         for i in range(len(self.info.taro)):
+            print ("B")
             result = self.computeCharacter(self.info.taro, i, self.info.rooms, result)
-        self.computeLight(result)
-        self.computeLight(result)
+        self.computePower(result)
         self.info.result = result
 
     def computeCharacter(self, taro, tile, rooms, last_result):
@@ -22,10 +23,9 @@ class IA:
         origin_room = char.room
         result = copy.copy(last_result)
         for character_room in char.room.rooms:
-            #print char.color, " from ", char.room.name, " to ", character_room.name
             char.moveToRoom(character_room)
             t_weight = self.computeWeight(rooms)
-            #print " weight ", t_weight
+            print ("t_weight ", t_weight)
             if t_weight > result["weight"]:
                 result["perso"] = char
                 result["tile"] = tile
@@ -45,12 +45,36 @@ class IA:
         weight = abs(nb_alone-nb_grp)
         return weight if self.info.number == partyInformations.GHOST else (10 - weight)
                 
-    def computeLight(self, result):
+
+    def computePower(self, result):
+        arr = {
+            "grey": self.computeGrey(result),
+            "blue": self.computeBlue(result),
+            "purple": self.computePurple(result),
+            "red": self.computeRed(result),
+            "pink": self.computePink(result),
+        }
+        func = arr.get(result['perso'].color, None)
+        if func:
+            func(result)
+
+    def computeGrey(self, result):
+        result["power"] = 1
         result["light"] = randrange(10)
 
-    def computeLock(self, result):
+    def computeBlue(self, result):
+        result["power"] = 1
         room = self.info.rooms[randrange(len(self.info.rooms))]
         result["lock"] = [room, room.rooms[randrange(len(room.rooms))]]
 
     def computePurple(self, result):
-        result["power"] = self.info.characters[randrange(len(self.info.characters))]
+        result["power"] = 1
+        result["powerResult"] = self.info.characters[randrange(len(self.info.characters))]
+    
+    def computeRed(self, result):
+        result["power"] = 1
+
+    def computePink(self, result):
+        result["power"] = 1
+
+    

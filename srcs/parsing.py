@@ -20,7 +20,6 @@ class Parser:
 		self.roomToBlockQuestion = "roomToBlock"
 		self.withWhichRoomQuestion = "withWhichRoom"
 		self.partyInfos = partyInfos
-		self.result = {}
 
 	def tryRead(self):
 		ok = False
@@ -131,6 +130,7 @@ class Parser:
 					if color == c.color:
 						self.partyInfos.taro.append(c)
 						break
+			print ("Taro read:", self.partyInfos.taro)
 		elif "Quelle salle obscurcir" in line:
 			self.questionType = self.roomLightQuestion
 		elif "Voulez-vous activer le pouvoir" in line:
@@ -160,20 +160,20 @@ class Parser:
 			rf.close()
 			return 
 		elif self.questionType == self.tileQuestion:
-	        	result = str(self.result["tile"])
+	        	result = str(self.partyInfos.result["tile"])
 		elif self.questionType == self.moveQuestion:
-	        	result = str(self.result["move"].name)
+	        	result = str(self.partyInfos.result["move"].name)
 		elif self.questionType == self.powerQuestion:
-	        	result = str(self.result["power"])
+	        	result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
-	        	result = str(self.result["lock"][0])
+	        	result = str(self.partyInfos.result["lock"][0])
 		elif self.questionType == self.withWhichRoomQuestion:
-	        	result = str(self.result["lock"][1])
+	        	result = str(self.partyInfos.result["lock"][1])
 		elif self.questionType == self.colorChangeQuestion:
-	        	result = str(self.result["power"].color)
+	        	result = str(self.partyInfos.result["power"].color)
 		elif self.questionType == self.roomLightQuestion:
-	        	result = str(self.result["light"])
-		print(str(self.partyInfos.number) + " " + self.questionType + " : Send " + result)
+	        	result = str(self.partyInfos.result["light"])
+		print ("Result:", self.partyInfos.result)
 		rf.write(result)
 		rf.close()
 

@@ -2,6 +2,7 @@ from random import shuffle,randrange
 from time import sleep
 from threading import Thread
 import dummy0, dummy1
+import dummy_0, dummy_1
 
 latence = 0.01
 permanents, deux, avant, apres = {'rose'}, {'rouge','gris','bleu'}, {'violet','marron'}, {'noir','blanc'}
@@ -189,7 +190,7 @@ class partie:
         return "Tour:" + str(self.num_tour) + ", Score:"+str(self.start)+"/"+str(self.end) + ", Ombre:" + str(self.shadow) + ", Bloque:" + str(self.bloque) +"\n" + "  ".join([str(p) for p in self.personnages])
 
 joueurs = [joueur(0),joueur(1)]
-Thread(target=dummy0.lancer).start()
+Thread(target=dummy_0.lancer).start()
 Thread(target=dummy1.lancer).start()
 partie(joueurs).lancer()
 
