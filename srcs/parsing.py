@@ -42,7 +42,7 @@ class Parser:
 
 	def parseTourInfos(self):
 		i = len(self.lines) - 1
-		while i > 0:
+		while i >= 0:
 			if "**************************" in (self.lines)[i]:
 				i += 1
 				tourInfos = self.lines[i].split(',')
