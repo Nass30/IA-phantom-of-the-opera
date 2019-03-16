@@ -1,14 +1,35 @@
 from Character import Character
 from Room import Room
 from partyInformations import PartyInformations
+import re
+from random import randrange
+from time import sleep
 
+latence = 2
 class Parser:
 	def __init__(self, partyInfos):
 		self.linesRead = 0
 		self.number = partyInfos.number
 		self.lines = []
+		self.questionType = "None"
+		self.moveQuestion = "move"
+		self.tileQuestion = "tile"
+		self.powerQuestion = "power"
+		self.colorChangeQuestion = "colorChange"
+		self.roomLightQuestion = "roomLight"
+		self.roomToBlockQuestion = "roomToBlock"
+		self.withWhichRoomQuestion = "withWhichRoom"
 		self.partyInfos = partyInfos
 
+	def tryRead(self):
+		ok = False
+		try:
+			f = open('./' + str(self.number) + '/questions.txt', 'r')
+			f.close()
+			ok = True
+		except IOError:
+			ok = False
+		return ok
 	def updateInfos(self):
 		info_file = open('./' + str(self.number) + '/infos.txt', 'r')
 		self.lines = info_file.readlines()
@@ -47,7 +68,7 @@ class Parser:
 			line = (self.lines)[i]
 			if "NOUVEAU PLACEMENT" in line:
 				move = line.split()[3]
-				color = move.split('-')[0]
+				color = move.split('-')[0]	
 				roomNumber = int(move.split('-')[1])
 				suspect = move.split('-')[2]
 				self.partyInfos.updateCharacter(color, roomNumber, True if suspect == "suspect" else False)
@@ -60,18 +81,26 @@ class Parser:
 					roomNumber = int(move.split('-')[1])
 					suspect = move.split('-')[2]
 					self.partyInfos.updateCharacter(color, roomNumber, True if suspect == "suspect" else False)
-			elif "QUESTION : Quelle salle obscurcir ? (0-9)" in line:
+			elif "Quelle salle obscurcir ? (0-9)" in line:
 				i += 2
+				if len(self.lines) <= i:
+					return
 				line = (self.lines)[i]
 				room = int(line.split()[3])
 				self.partyInfos.obscurcirRoom(room)
 			elif "Quelle salle bloquer ? (0-9)" in line:
 				i += 4
+				if len(self.lines) <= i:
+					return
 				line = (self.lines)[i]
 				passage = line.split()[3]
-				room1 = int(passage[1])
-				room2 = int(passage[4])
+				room1 = int(line.split()[3][1])
+				room2 = int(line.split()[4][0])
 				self.partyInfos.bloquePassage(room1, room2)
+			elif "Score final" in line:
+				print("line finish = " + line)
+				print("Game finish")
+				exit()
 			i += 1
 
 	def readInfos(self):
@@ -86,12 +115,66 @@ class Parser:
 
 	def readQuestion(self):
 		questionFile = open('./' + str(self.number) + '/questions.txt', 'r')
-		questionLine = questionFile.read()
+		line = questionFile.read()
+		if len(line) > 0:
+			print(str(self.number) + " : Question :" + line + ":")
+		if "Tuiles disponibles" in line:
+			self.questionType = self.tileQuestion
+			m = re.search('\[(.+?)\]', line).group(1)
+			characters = m.split(',')
+			self.partyInfos.taro = []
+			for character in characters:
+				character = character.replace(' ', '')
+				color = character.split('-')[0]
+				for c in self.partyInfos.characters:
+					if color == c.color:
+						self.partyInfos.taro.append(c)
+						break
+		elif "Quelle salle obscurcir" in line:
+			self.questionType = self.roomLightQuestion
+		elif "Voulez-vous activer le pouvoir" in line:
+			self.questionType = self.powerQuestion
+		elif "positions disponibles : " in line:
+			self.questionType = self.moveQuestion
+		elif "Avec quelle couleur échanger (pas violet!) ?" in line:
+			self.questionType = self.colorChangeQuestion
+		elif "Quelle salle bloquer ? (0-9)" in line:
+			self.questionType = self.roomToBlockQuestion
+		elif "Quelle sortie ? Chosir parmi" in line:
+			self.questionType = self.withWhichRoomQuestion
+		else:
+			self.questionType = "None"
+			questionFile.close()
+			return False
 		questionFile.close()
-		return questionLine
+		questionFile = open('./' + str(self.number) + '/questions.txt', 'w')
+		questionFile.write("")
+		questionFile.close()
+		return True
 
-	def sendResponse(self, str):
+	def sendResponse(self):
 		rf = open('./' + str(self.number) + '/reponses.txt','w')
-		rf.write(str)
+		result = ""
+		if self.questionType == "None":
+			rf.close()
+			return 
+		elif self.questionType == self.tileQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.moveQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.powerQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.roomToBlockQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.withWhichRoomQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.colorChangeQuestion:
+	        	result = str(randrange(10))
+		elif self.questionType == self.roomLightQuestion:
+	        	result = str(randrange(10))
+		print(str(self.partyInfos.number) + " " + self.questionType + " : Send " + result)
+		rf.write(result)
 		rf.close()
+
+
 		

@@ -10,9 +10,14 @@ class Party:
 	def __init__(self, number):
 		self.partyInfos = PartyInformations(number)
 		self.parser = Parser(self.partyInfos)
-		self.parser.updateInfos()
-		if number == 1:
-			self.parser.getGhost()
-		self.parser.parseTourInfos()
-                
-		print(self.partyInfos)
+		while self.parser.tryRead() == False:
+			continue
+		while True:
+			self.parser.updateInfos()
+			if number == 1:
+				self.parser.getGhost()
+			self.parser.parseTourInfos()
+			if self.parser.readQuestion() == False:
+				continue
+			# IA HERE
+			self.parser.sendResponse()

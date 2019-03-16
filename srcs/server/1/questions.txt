@@ -1,1 +1,1 @@
-Voulez-vous activer le pouvoir (0/1) ?
+Tuiles disponibles : [rouge-9-suspect, bleu-1-clean] choisir entre 0 et 1
