@@ -20,6 +20,7 @@ class Parser:
 		self.roomToBlockQuestion = "roomToBlock"
 		self.withWhichRoomQuestion = "withWhichRoom"
 		self.partyInfos = partyInfos
+		self.result = {}
 
 	def tryRead(self):
 		ok = False
@@ -159,19 +160,19 @@ class Parser:
 			rf.close()
 			return 
 		elif self.questionType == self.tileQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["tile"])
 		elif self.questionType == self.moveQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["move"].name)
 		elif self.questionType == self.powerQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["lock"][0])
 		elif self.questionType == self.withWhichRoomQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["lock"][1])
 		elif self.questionType == self.colorChangeQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["power"].color)
 		elif self.questionType == self.roomLightQuestion:
-	        	result = str(randrange(10))
+	        	result = str(self.result["light"])
 		print(str(self.partyInfos.number) + " " + self.questionType + " : Send " + result)
 		rf.write(result)
 		rf.close()
