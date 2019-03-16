@@ -170,12 +170,8 @@ class Parser:
 		elif self.questionType == self.withWhichRoomQuestion:
 	        	result = str(self.partyInfos.result["lock"][1])
 		elif self.questionType == self.colorChangeQuestion:
-	        	result = str(self.partyInfos.result["power"].color)
+	        	result = str(self.partyInfos.result["powerResult"])
 		elif self.questionType == self.roomLightQuestion:
 	        	result = str(self.partyInfos.result["light"])
-		print ("Result:", self.partyInfos.result)
 		rf.write(result)
 		rf.close()
-
-
-		

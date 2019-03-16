@@ -24,7 +24,6 @@ class IA:
         for character_room in char.room.rooms:
             char.moveToRoom(character_room)
             t_weight = self.computeWeight(rooms)
-            print ("t_weight ", t_weight)
             if t_weight > result["weight"]:
                 result["perso"] = char
                 result["tile"] = tile
@@ -44,6 +43,7 @@ class IA:
         if self.info.number == partyInformations.GHOST:
             return nb_alone if len(self.info.getPersoFromColor(self.info.fantome).room.characters) == 1 else nb_grp
         return (10 - abs(nb_alone-nb_grp))
+                
 
     def computePower(self, result):
         arr = {
