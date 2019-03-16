@@ -13,7 +13,6 @@ class IA:
         result = {"tile":0, "perso":None, "move":None, "power":0, "weight":-1, "lock":0, "light":0, "powerResult":0}
         print ("taro:", self.info.taro)
         for i in range(len(self.info.taro)):
-            print ("B")
             result = self.computeCharacter(self.info.taro, i, self.info.rooms, result)
         self.computePower(result)
         self.info.result = result
@@ -42,9 +41,9 @@ class IA:
                 nb_alone += 1 if room.characters[0].suspect else 0
             else:
                 nb_grp += len([char for char in room.characters if char.suspect])
-        weight = abs(nb_alone-nb_grp)
-        return weight if self.info.number == partyInformations.GHOST else (10 - weight)
-                
+        if self.info.number == partyInformations.GHOST:
+            return nb_alone if len(self.info.getPersoFromColor(self.info.fantome).room.characters) == 1 else nb_grp
+        return (10 - abs(nb_alone-nb_grp))
 
     def computePower(self, result):
         arr = {

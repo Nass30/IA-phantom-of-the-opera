@@ -13,7 +13,7 @@ class PartyInformations:
         self.characters = []
         self.carlota = 4
         self.maxCarlota = 22
-        self.fantome = "none"
+        self.fantome = None
         self.taro = []
         self.turn = []
 
@@ -57,6 +57,12 @@ class PartyInformations:
             room.roomBloque = None
         self.rooms[room1].roomBloque = room2
         self.rooms[room2].roomBloque = room1
+
+    def getPersoFromColor(self, color):
+        for char in self.characters:
+            if char.color == color:
+                return char
+        return None
 
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.__dict__)
