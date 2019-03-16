@@ -64,6 +64,15 @@ class PartyInformations:
                 return char
         return None
 
+    def copy(self):
+        copy = PartyInformations(this.number)
+        r = None
+        for room in self.rooms:
+            if not room.light:
+                r = room
+                break
+        copy.update(self.tourNumber, self.carlota, self.maxCarlota, r, self.b)
+
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.__dict__)
 

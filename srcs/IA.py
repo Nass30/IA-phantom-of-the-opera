@@ -22,6 +22,8 @@ class IA:
         origin_room = char.room
         result = copy.copy(last_result)
         for character_room in char.room.rooms:
+            if character_room.name == char.room.roomBloque:
+                continue
             char.moveToRoom(character_room)
             t_weight = self.computeWeight(rooms)
             if t_weight > result["weight"]:
