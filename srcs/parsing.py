@@ -42,6 +42,8 @@ class Parser:
 
 	def parseTourInfos(self):
 		i = len(self.lines) - 1
+		if i == -1:
+			return
 		while i >= 0:
 			if "**************************" in (self.lines)[i]:
 				i += 1

@@ -9,12 +9,31 @@ class PartyInformations:
         self.number = number
         self.tourNumber = 1
         self.rooms = []
+        self.salleOmbre = None
+        self.roomBloque1 = None
+        self.roomBloque2 = None
         self.createRoom()
         self.characters = []
         self.carlota = 4
         self.maxCarlota = 22
         self.fantome = None
         self.taro = []
+
+    def createDeepCopy(self):
+        new = PartyInformations(self.number)
+        new.update(self.tourNumber, self.carlota, self.maxCarlota, self.salleOmbre, self.roomBloque1, self.roomBloque2)
+        new.fantome = self.fantome
+        for character in self.characters:
+            for room in new.rooms:
+                if room.name == character.room.name:
+                    newChar = Character(character.color, character.suspect, room)
+                    new.characters.append(newChar)
+                    break
+        new.taro = []
+        for t in self.taro:
+            char = new.getPersoFromColor(t.color)
+            new.taro.append(char)
+        return new
 
     def createRoom(self):
         self.rooms = [Room(0), Room(1), Room(2), Room(3), Room(4), Room(5), Room(6), Room(7), Room(8), Room(9)]
@@ -29,6 +48,7 @@ class PartyInformations:
                 room.addExtendedRoom(self.rooms[otherRoom])
 
     def obscurcirRoom(self, numero):
+        self.salleOmbre = numero
         for room in self.rooms:
             if room.name == numero:
                 room.light = False
@@ -52,6 +72,8 @@ class PartyInformations:
         self.characters.append(Character(color, suspect, self.rooms[numberRoom]))
 
     def bloquePassage(self, room1, room2):
+        self.roomBloque1 = room1
+        self.roomBloque2 = room2
         for room in self.rooms:
             room.roomBloque = None
         self.rooms[room1].roomBloque = room2
