@@ -7,6 +7,7 @@ GHOST = 1
 INSPECTOR = 0
 BEST_MOVE = None
 NUM = 0
+C = ["","","","",""]
 
 def print_taro(taro):
     res = '\ttaro :[ '
@@ -28,37 +29,51 @@ def compute(info):
     result = {"tile":0, "perso":None, "move":None, "power":-1, "weight":-1}
     BEST_MOVE = dict(result)
     ghost = info.getFantome()
-    check_taro(result, info.taro, info.rooms, info.number, ghost)
-    print ("res:::", result["perso"].color, " from ", result["perso"].room.name, " to ", result["move"].name)
+    check_taro(result, info.taro, info.rooms, info.number, ghost, info)
+    result = BEST_MOVE
+    print ("res:::", result["perso"].color, " from ", result["perso"].room.name, " to ", info.getRoom(result["move"]))
     info.result = result
 
-def check_taro(result, taro, rooms, who, ghost):
-    print ("****check_taro::",NUM)
-    print_taro(taro)
-    print_rooms(rooms)
-    print ("who:",who, " ghost:", ghost.color if ghost else " NO")
+def check_taro(result, taro, rooms, who, ghost, info):
+    global NUM
+    NUM += 1
+    global C
+    #print ("****check_taro::",NUM)
+    #print_taro(taro)
+    #print_rooms(rooms)
+    #print ("who:",who, " ghost:", ghost.color if ghost else " NO")
     for i in range(len(taro)):
-        character = taro[i]
-        print ("************sub_taro::",NUM, " char:",character.color)
-        if result["perso"] == None:
-            result["perso"] = character
-            result["tile"] = character
-        copy = list(taro)
-        copy.remove(character)
-        check_move(character, result, copy, rooms, who, ghost)
+        new_info = info.createDeepCopy()
+        character = new_info.taro[i]
+        C[NUM] = character.color
+        #print ("************sub_taro::",NUM, " char:",character.color)
+        if NUM == 1:
+            new_res = dict(result)
+            new_res["perso"] = taro[i]
+            new_res["tile"] = i
+        else:
+            new_res = result
+        new_info.taro.remove(new_info.taro[i])
+        check_move(character, new_res, new_info.taro, new_info.rooms, who, ghost, new_info)
+    NUM -= 1
+    
 
-def check_move(character, result, taro, rooms, who, ghost):
+def check_move(character, result, taro, rooms, who, ghost, info):
     origine = character.room
-    for room in character.room.rooms:
+    for i in range(len(character.room.rooms)):
+        room = character.room.rooms[i]
         if room.name == character.room.roomBloque:
             continue
         character.moveToRoom(room)
-        if result['move'] == None:
-            result['move'] = room
-        check_power(character, result, taro, rooms, who, ghost)
+        if NUM == 1:
+            new_res = dict(result)
+            new_res['move'] = i
+        else:
+            new_res = result
+        check_power(character, new_res, taro, rooms, who, ghost, info)
         character.moveToRoom(origine)
 
-def check_power(character, result, taro, rooms, who, ghost):
+def check_power(character, result, taro, rooms, who, ghost, info):
     global BEST_MOVE
     global NUM
     if result['power'] == -1:
@@ -67,13 +82,13 @@ def check_power(character, result, taro, rooms, who, ghost):
     if len(taro) > 0:
         if len(taro) != 2:
             who = GHOST if who == INSPECTOR else INSPECTOR
-        NUM += 1
-        check_taro(result, taro, rooms, who, ghost)
+        check_taro(result, taro, rooms, who, ghost, info)
     else:
-        NUM = 0
         result["weight"] = compute_weight(rooms, who, ghost)
         if result["weight"] > BEST_MOVE["weight"]:
             BEST_MOVE = result
+        #print("END OF CYCLE:", C[1]," ", C[2]," ", C[3], "  cool:",result['perso'].color)
+        #input()
 
 def compute_weight(rooms, who, ghost):
     nb_alone = 0

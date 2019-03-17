@@ -19,6 +19,20 @@ class PartyInformations:
         self.fantome = None
         self.taro = []
 
+    def copyTaro(self, taro):
+        res = []
+        for char in self.characters:
+            for t in taro:
+                if t.color == char.color:
+                    res.append(char)
+        return res
+
+    def getRoom(self, name):
+        for room in self.rooms:
+            if room.name == name:
+                return room
+        return None
+
     def createDeepCopy(self):
         new = PartyInformations(self.number)
         new.update(self.tourNumber, self.carlota, self.maxCarlota, self.salleOmbre, self.roomBloque1, self.roomBloque2)

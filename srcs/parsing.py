@@ -164,7 +164,7 @@ class Parser:
 		elif self.questionType == self.tileQuestion:
 	        	result = str(self.partyInfos.result["tile"])
 		elif self.questionType == self.moveQuestion:
-	        	result = str(self.partyInfos.result["move"].name)
+	        	result = str(self.partyInfos.getRoom(self.partyInfos.result["move"]).name)
 		elif self.questionType == self.powerQuestion:
 	        	result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
