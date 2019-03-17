@@ -26,7 +26,8 @@ def print_rooms(room):
 
 def compute(info):
     global BEST_MOVE
-    result = {"tile":0, "perso":None, "move":None, "power":-1, "weight":-1}
+    print (info)
+    result = {"tile":0, "perso":None, "move":None, "power":-1, "weight":-1, "power_weight":0}
     BEST_MOVE = dict(result)
     ghost = info.getFantome()
     check_taro(result, info.taro, info.rooms, info.number, ghost, info)
@@ -59,10 +60,12 @@ def check_taro(result, taro, rooms, who, ghost, info):
     
 def check_move(character, result, taro, rooms, who, ghost, info):
     origine = character.room
-    for i in range(len(character.room.rooms)):
-        room = character.room.rooms[i]
+    list_room = character.room.rooms if character.color != "rose" else character.room.extendedRooms
+    for i in range(len(list_room)):
+        room = list_room[i]
         if room.name == character.room.roomBloque:
             continue
+        print("O: ", result["perso"].color, " from :", origine.name, " to ",room.name)
         character.moveToRoom(room)
         if NUM == 1:
             new_res = dict(result)
@@ -99,22 +102,26 @@ def check_power(character, result, taro, rooms, who, ghost, info):
 def check_weight(character, result, taro, rooms, who, ghost, info):
     global BEST_MOVE
     global NUM
-    #if len(taro) > 0:
-    #    if len(taro) != 2:
-    #        who = GHOST if who == INSPECTOR else INSPECTOR
-    #    check_taro(result, taro, rooms, who, ghost, info)
-    #else:
-    result["weight"] = compute_weight(rooms, who, ghost)
-    if result["weight"] > BEST_MOVE["weight"]:
-        BEST_MOVE = dict(result)
-        #print("END OF CYCLE:", C[1]," ", C[2]," ", C[3], "  cool:",result['perso'].color)
-        #input()
+    if len(taro) == 2:
+        #if len(taro) != 2:
+        #    who = GHOST if who == INSPECTOR else INSPECTOR
+        check_taro(result, taro, rooms, who, ghost, info)
+    else:
+        result["weight"] = compute_weight(rooms, who, ghost)
+        if result["weight"] + result["power_weight"] > BEST_MOVE["weight"] + BEST_MOVE["power_weight"]:
+            BEST_MOVE = dict(result)
+    print("Weight:",result["weight"])
+    print (info)
+    print ("###################################################")
+    #input()
 
 def compute_weight(rooms, who, ghost):
     nb_alone = 0
     nb_grp = 0
     for room in rooms:
-        if len(room.characters) == 1:
+        if not room.light:
+            nb_alone += len([char for char in room.characters if char.suspect])
+        elif len(room.characters) == 1:
             nb_alone += 1 if room.characters[0].suspect else 0
         else:
             nb_grp += len([char for char in room.characters if char.suspect])
@@ -138,20 +145,31 @@ def computeBlue(character, result, taro, rooms, who, ghost, info):
     #result["lock"] = [room, room.rooms[randrange(len(room.rooms))]]
 
 def computePurple(character, result, taro, rooms, who, ghost, info):
-    if NUM == 1:
-        result["power_effect"] = 0
-    check_weight(character, result, taro, rooms, who, ghost, info)
+    for c in info.characters:
+        tmp_room = character.room
+        character.moveToRoom(c.room)
+        c.moveToRoom(tmp_room)
+        if NUM == 1:
+            result["power_effect"] = c.color
+        check_weight(character, result, taro, rooms, who, ghost, info)
+        tmp_room = character.room
+        character.moveToRoom(c.room)
+        c.moveToRoom(tmp_room)
     #result["powerResult"] = self.info.characters[randrange(len(self.info.characters))]
     
 def computeRed(character, result, taro, rooms, who, ghost, info):
     if NUM == 1:
         result["power_effect"] = None
+    susp = len([char for char in info.characters if char.suspect])
+    result["power_weight"] = 1
+    if susp > 4:
+        result["power_weight"] = 2
     check_weight(character, result, taro, rooms, who, ghost, info)
 
 def computePink(character, result, taro, rooms, who, ghost, info):
     if NUM == 1:
         result["power_effect"] = None
-    check_weight(character, result, taro, rooms, who, ghost, info)
+    # pas de pouvoir
 
 def computeWhite(character, result, taro, rooms, who, ghost, info):
     if NUM == 1:

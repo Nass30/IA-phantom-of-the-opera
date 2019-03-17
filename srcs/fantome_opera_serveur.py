@@ -4,7 +4,7 @@ from threading import Thread
 import dummy0, dummy1
 import dummy_0, dummy_1
 
-latence = 0.5
+latence = 0.2
 permanents, deux, avant, apres = {'rose'}, {'rouge','gris','bleu'}, {'violet','marron'}, {'noir','blanc'}
 couleurs = avant | permanents | apres | deux
 passages = [{1,4},{0,2},{1,3},{2,7},{0,5,8},{4,6},{5,7},{3,6,9},{4,9},{7,8}]
@@ -190,7 +190,7 @@ class partie:
         return "Tour:" + str(self.num_tour) + ", Score:"+str(self.start)+"/"+str(self.end) + ", Ombre:" + str(self.shadow) + ", Bloque:" + str(self.bloque) +"\n" + "  ".join([str(p) for p in self.personnages])
 
 joueurs = [joueur(0),joueur(1)]
-Thread(target=dummy_0.lancer).start()
-Thread(target=dummy1.lancer).start()
+Thread(target=dummy0.lancer).start()
+Thread(target=dummy_1.lancer).start()
 partie(joueurs).lancer()
 
