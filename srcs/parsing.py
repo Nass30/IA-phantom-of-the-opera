@@ -164,16 +164,16 @@ class Parser:
 		elif self.questionType == self.tileQuestion:
 	        	result = str(self.partyInfos.result["tile"])
 		elif self.questionType == self.moveQuestion:
-	        	result = str(self.partyInfos.getRoom(self.partyInfos.result["move"]).name)
+	        	result = str(self.partyInfos.result["move"])
 		elif self.questionType == self.powerQuestion:
 	        	result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
-	        	result = str(self.partyInfos.result["lock"][0])
+	        	result = str(self.partyInfos.result["power_effect"][0])
 		elif self.questionType == self.withWhichRoomQuestion:
-	        	result = str(self.partyInfos.result["lock"][1])
+	        	result = str(self.partyInfos.result["power_effect"][1])
 		elif self.questionType == self.colorChangeQuestion:
-	        	result = str(self.partyInfos.result["powerResult"])
+	        	result = str(self.partyInfos.result["power_effect"])
 		elif self.questionType == self.roomLightQuestion:
-	        	result = str(self.partyInfos.result["light"])
+	        	result = str(self.partyInfos.result["power_effect"])
 		rf.write(result)
 		rf.close()

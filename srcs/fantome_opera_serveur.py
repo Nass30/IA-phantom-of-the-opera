@@ -4,7 +4,7 @@ from threading import Thread
 import dummy0, dummy1
 import dummy_0, dummy_1
 
-latence = 0.01
+latence = 0.5
 permanents, deux, avant, apres = {'rose'}, {'rouge','gris','bleu'}, {'violet','marron'}, {'noir','blanc'}
 couleurs = avant | permanents | apres | deux
 passages = [{1,4},{0,2},{1,3},{2,7},{0,5,8},{4,6},{5,7},{3,6,9},{4,9},{7,8}]
