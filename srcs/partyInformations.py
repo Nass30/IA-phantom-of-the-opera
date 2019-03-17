@@ -15,7 +15,6 @@ class PartyInformations:
         self.maxCarlota = 22
         self.fantome = None
         self.taro = []
-        self.turn = []
 
     def createRoom(self):
         self.rooms = [Room(0), Room(1), Room(2), Room(3), Room(4), Room(5), Room(6), Room(7), Room(8), Room(9)]
@@ -64,14 +63,11 @@ class PartyInformations:
                 return char
         return None
 
-    def copy(self):
-        copy = PartyInformations(this.number)
-        r = None
-        for room in self.rooms:
-            if not room.light:
-                r = room
-                break
-        copy.update(self.tourNumber, self.carlota, self.maxCarlota, r, self.b)
+    def getFantome(self):
+        for char in self.characters:
+            if char.color == self.fantome:
+                return char
+        return None
 
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.__dict__)
