@@ -62,7 +62,6 @@ def check_move(character, result, taro, rooms, who, ghost, info):
     for i in range(len(character.room.rooms)):
         room = character.room.rooms[i]
         if room.name == character.room.roomBloque:
-            i -= 1
             continue
         character.moveToRoom(room)
         if NUM == 1:
@@ -89,23 +88,25 @@ def check_power(character, result, taro, rooms, who, ghost, info):
         if NUM == 1:
             result['power'] = 0
             check_weight(character, result, taro, rooms, who, ghost, info)
-            result['power'] = 1
-            func(character, result, taro, rooms, who, ghost, info)
+            #result['power'] = 1
+            #func(character, result, taro, rooms, who, ghost, info)
         else :
             check_weight(character, result, taro, rooms, who, ghost, info)
-            func(character, result, taro, rooms, who, ghost, info)
+            #func(character, result, taro, rooms, who, ghost, info)
+    else :
+        print ("ERRROORRRRRRRRR")
 
 def check_weight(character, result, taro, rooms, who, ghost, info):
     global BEST_MOVE
     global NUM
-    if len(taro) > 0:
-        if len(taro) != 2:
-            who = GHOST if who == INSPECTOR else INSPECTOR
-        check_taro(result, taro, rooms, who, ghost, info)
-    else:
-        result["weight"] = compute_weight(rooms, who, ghost)
-        if result["weight"] > BEST_MOVE["weight"]:
-            BEST_MOVE = result
+    #if len(taro) > 0:
+    #    if len(taro) != 2:
+    #        who = GHOST if who == INSPECTOR else INSPECTOR
+    #    check_taro(result, taro, rooms, who, ghost, info)
+    #else:
+    result["weight"] = compute_weight(rooms, who, ghost)
+    if result["weight"] > BEST_MOVE["weight"]:
+        BEST_MOVE = dict(result)
         #print("END OF CYCLE:", C[1]," ", C[2]," ", C[3], "  cool:",result['perso'].color)
         #input()
 
