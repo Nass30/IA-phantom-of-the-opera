@@ -5,7 +5,6 @@ import re
 from random import randrange
 from time import sleep
 
-latence = 2
 class Parser:
 	def __init__(self, partyInfos):
 		self.linesRead = 0
@@ -133,7 +132,7 @@ class Parser:
 		if "Tuiles disponibles" in line:
 			print("\n\n********New turn********")
 		if len(line) > 0:
-			print("Inspecteur" if str(self.number) == 0 else "Fantome" + " : Question :" + line + ":")
+			print(("Inspecteur" if self.number == 0 else "Fantome") + " : Question :" + line + ":")
 		if "Tuiles disponibles" in line:
 			self.questionType = self.tileQuestion
 			m = re.search('\[(.+?)\]', line).group(1)
@@ -191,7 +190,11 @@ class Parser:
 					result = str(index)
 					break
 		elif self.questionType == self.powerQuestion:
-	        	result = str(self.partyInfos.result["power"])
+			if self.partyInfos.result["perso"].color == "rouge":
+				result = "1"
+			else:
+		        	result = "0"
+	        	# result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
 	        	result = str(self.partyInfos.result["power_effect"][0])
 		elif self.questionType == self.withWhichRoomQuestion:

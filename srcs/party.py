@@ -4,8 +4,7 @@ from Room import Room
 from parsing import Parser
 import IA
 from partyInformations import PartyInformations
-
-import time
+from timeit import default_timer as timer
 
 class Party:
 	def __init__(self, number):
@@ -21,5 +20,8 @@ class Party:
 			if self.parser.readQuestion() == False:
 				continue
 			if self.parser.questionType == self.parser.tileQuestion:
+				start = timer()
 				IA.compute(self.partyInfos)
+				end = timer()
+				print("time elapsed = " + str(end - start))
 			self.parser.sendResponse()
