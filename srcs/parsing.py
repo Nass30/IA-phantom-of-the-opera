@@ -185,10 +185,11 @@ class Parser:
 			print(self.partyInfos.result)
 			result = str(self.partyInfos.result["tile"])
 		elif self.questionType == self.moveQuestion:
-			for index, room in enumerate(self.finalRooms):
-				if room == self.partyInfos.result["move"]:
-					result = str(index)
-					break
+			result = str(self.partyInfos.result["move"])
+			# for index, room in enumerate(self.finalRooms):
+			# 	if room == self.partyInfos.result["move"]:
+			# 		result = str(index)
+			# 		break
 		elif self.questionType == self.powerQuestion:
 			if self.partyInfos.result["perso"].color == "rouge":
 				result = "1"

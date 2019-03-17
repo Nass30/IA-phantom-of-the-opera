@@ -13,6 +13,7 @@ class Party:
 		while self.parser.tryRead() == False:
 			continue
 		while True:
+			start = timer()
 			self.parser.updateInfos()
 			if number == 1:
 				self.parser.getGhost()
@@ -20,7 +21,6 @@ class Party:
 			if self.parser.readQuestion() == False:
 				continue
 			if self.parser.questionType == self.parser.tileQuestion:
-				start = timer()
 				IA.compute(self.partyInfos)
 				end = timer()
 				print("time elapsed = " + str(end - start))
