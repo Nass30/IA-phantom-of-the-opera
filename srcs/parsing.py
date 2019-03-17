@@ -5,7 +5,6 @@ import re
 from random import randrange
 from time import sleep
 
-latence = 2
 class Parser:
 	def __init__(self, partyInfos):
 		self.linesRead = 0
@@ -191,7 +190,11 @@ class Parser:
 					result = str(index)
 					break
 		elif self.questionType == self.powerQuestion:
-	        	result = str(self.partyInfos.result["power"])
+			if self.partyInfos.result["perso"].color == "rouge":
+				result = "1"
+			else:
+		        	result = "0"
+	        	# result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
 	        	result = str(self.partyInfos.result["power_effect"][0])
 		elif self.questionType == self.withWhichRoomQuestion:
