@@ -133,7 +133,7 @@ class Parser:
 		if "Tuiles disponibles" in line:
 			print("\n\n********New turn********")
 		if len(line) > 0:
-			print("Inspecteur" if str(self.number) == 0 else "Fantome" + " : Question :" + line + ":")
+			print(("Inspecteur" if self.number == 0 else "Fantome") + " : Question :" + line + ":")
 		if "Tuiles disponibles" in line:
 			self.questionType = self.tileQuestion
 			m = re.search('\[(.+?)\]', line).group(1)
