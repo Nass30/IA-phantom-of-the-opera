@@ -191,11 +191,7 @@ class Parser:
 			# 		result = str(index)
 			# 		break
 		elif self.questionType == self.powerQuestion:
-			if self.partyInfos.result["perso"].color == "rouge":
-				result = "1"
-			else:
-		        	result = "0"
-	        	# result = str(self.partyInfos.result["power"])
+	        	result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
 	        	result = str(self.partyInfos.result["power_effect"][0])
 		elif self.questionType == self.withWhichRoomQuestion:
