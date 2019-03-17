@@ -11,6 +11,7 @@ class Parser:
 		self.linesRead = 0
 		self.number = partyInfos.number
 		self.lines = []
+		self.rooms = []
 		self.questionType = "None"
 		self.moveQuestion = "move"
 		self.tileQuestion = "tile"
@@ -100,9 +101,20 @@ class Parser:
 				room2 = int(line.split()[4][0])
 				self.partyInfos.bloquePassage(room1, room2)
 			elif "Score final" in line:
-				print("line finish = " + line)
-				print("Game finish")
+				score = int(line.split()[3])
+				if self.partyInfos.number == 0:
+					if score > 0:
+						print("Orewa Meitante Conan !!!")
+					else:
+						print("Orewa Meitante Anthony !!!")
+				else:
+					if score > 0:
+						print("J'ai perdu, c'est Conan en face!")
+					else:
+						print("J'ai gagné, c'est Anthony en face!")
+				print(line)
 				exit()
+
 			i += 1
 
 	def readInfos(self):
@@ -118,8 +130,10 @@ class Parser:
 	def readQuestion(self):
 		questionFile = open('./' + str(self.number) + '/questions.txt', 'r')
 		line = questionFile.read()
+		if "Tuiles disponibles" in line:
+			print("\n\n********New turn********")
 		if len(line) > 0:
-			print(str(self.number) + " : Question :" + line + ":")
+			print("Inspecteur" if str(self.number) == 0 else "Fantome" + " : Question :" + line + ":")
 		if "Tuiles disponibles" in line:
 			self.questionType = self.tileQuestion
 			m = re.search('\[(.+?)\]', line).group(1)
@@ -132,12 +146,18 @@ class Parser:
 					if color == c.color:
 						self.partyInfos.taro.append(c)
 						break
-			print ("Taro read:", self.partyInfos.taro)
+			# print ("Taro read:", self.partyInfos.taro)
 		elif "Quelle salle obscurcir" in line:
 			self.questionType = self.roomLightQuestion
 		elif "Voulez-vous activer le pouvoir" in line:
 			self.questionType = self.powerQuestion
 		elif "positions disponibles : " in line:
+			m = re.search('\{(.+?)\}', line).group(1)
+			rooms = m.split(',')
+			self.finalRooms = []
+			for room in rooms:
+				room = room.replace(' ','')
+				self.finalRooms.append(int(room))
 			self.questionType = self.moveQuestion
 		elif "Avec quelle couleur échanger (pas violet!) ?" in line:
 			self.questionType = self.colorChangeQuestion
@@ -160,11 +180,16 @@ class Parser:
 		result = ""
 		if self.questionType == "None":
 			rf.close()
-			return 
+			return
 		elif self.questionType == self.tileQuestion:
-	        	result = str(self.partyInfos.result["tile"])
+			print("IA RESULT :")
+			print(self.partyInfos.result)
+			result = str(self.partyInfos.result["tile"])
 		elif self.questionType == self.moveQuestion:
-	        	result = str(self.partyInfos.result["move"])
+			for index, room in enumerate(self.finalRooms):
+				if room == self.partyInfos.result["move"]:
+					result = str(index)
+					break
 		elif self.questionType == self.powerQuestion:
 	        	result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
@@ -175,5 +200,6 @@ class Parser:
 	        	result = str(self.partyInfos.result["power_effect"])
 		elif self.questionType == self.roomLightQuestion:
 	        	result = str(self.partyInfos.result["power_effect"])
+		print("Response : " + result)
 		rf.write(result)
 		rf.close()

@@ -14,5 +14,8 @@ class Character:
 		self.room = room
 		room.addCharacter(self)
 
+	def __repr__(self):
+		return str(self)
+
 	def __str__(self):
 		return "Character " + self.color + " in Room " + str(self.room.name) + (" is suspect" if self.suspect == True else " is clean")
