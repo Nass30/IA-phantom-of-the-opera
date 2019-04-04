@@ -1,12 +1,18 @@
 #!/usr/bin/env python
 
 import partyInformations
+import time
 from random import randrange
+
+current_milli_time = lambda: int(round(time.time() * 1000))
 
 GHOST = 1
 INSPECTOR = 0
 BEST_MOVE = None
 NUM = 0
+START = 0
+NB_CALL = 0
+MAX_TIME = 0.8 * 1000
 C = ["","","","",""]
 
 def print_taro(taro):
@@ -26,8 +32,13 @@ def print_rooms(room):
 
 def compute(info):
     global BEST_MOVE
+    global NB_CALL
+    global START
+    START = current_milli_time()
+    NB_CALL = 0
     print (info)
-    result = {"tile":0, "perso":None, "move":None, "power":-1, "weight":-1, "power_weight":0}
+    result = {"tile":0, "perso":info.taro[0], "move":info.taro[0].room.rooms[0].name, "power":0, "weight":-1, "power_weight":0, "power_effect":0}
+    info.result = result
     BEST_MOVE = dict(result)
     ghost = info.getFantome()
     check_taro(result, info.taro, info.rooms, info.number, ghost, info)
@@ -37,17 +48,20 @@ def compute(info):
 
 def check_taro(result, taro, rooms, who, ghost, info):
     global NUM
-    NUM += 1
+    global NB_CALL
     global C
-    #print ("****check_taro::",NUM)
-    #print_taro(taro)
-    #print_rooms(rooms)
-    #print ("who:",who, " ghost:", ghost.color if ghost else " NO")
+
+    NB_CALL += 1
+    if (current_milli_time() - START) + (current_milli_time() - START) / NB_CALL >= MAX_TIME:
+        NB_CALL -= 1
+        print("Y A PAS LE TIIIMMEEE  AAYYYYYYYYYYYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ON S ARRETE LA HOPHOPHOPHOPHOPHOP")
+        return
+    NUM += 1
+    
     for i in range(len(taro)):
         new_info = info.createDeepCopy()
         character = new_info.taro[i]
         C[NUM] = character.color
-        #print ("************sub_taro::",NUM, " char:",character.color)
         if NUM == 1:
             new_res = dict(result)
             new_res["perso"] = taro[i]

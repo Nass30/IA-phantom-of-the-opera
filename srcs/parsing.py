@@ -191,15 +191,21 @@ class Parser:
 			# 		result = str(index)
 			# 		break
 		elif self.questionType == self.powerQuestion:
-	        	result = str(self.partyInfos.result["power"])
+			result = str(self.partyInfos.result["power"])
 		elif self.questionType == self.roomToBlockQuestion:
-	        	result = str(self.partyInfos.result["power_effect"][0])
+			try:
+				result = str(self.partyInfos.result["power_effect"][0])
+			except TypeError as e:
+				result = str(0)
 		elif self.questionType == self.withWhichRoomQuestion:
-	        	result = str(self.partyInfos.result["power_effect"][1])
+			try:
+				result = str(self.partyInfos.result["power_effect"][1])
+			except TypeError as e:
+				result = str(0)
 		elif self.questionType == self.colorChangeQuestion:
-	        	result = str(self.partyInfos.result["power_effect"])
+			result = str(self.partyInfos.result["power_effect"])
 		elif self.questionType == self.roomLightQuestion:
-	        	result = str(self.partyInfos.result["power_effect"])
+			result = str(self.partyInfos.result["power_effect"])
 		print("Response : " + result)
 		rf.write(result)
 		rf.close()
